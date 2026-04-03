@@ -1,16 +1,31 @@
 import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 
-// Serve all static files in the root directory
-app.use(express.static("."));
+app.use(express.static(__dirname));
 
-// Serve index.html for the root route
 app.get("/", (req, res) => {
-  res.sendFile("index.html", { root: "." });
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
-// Cloud Run requires listening on process.env.PORT
+app.get("/services", (req, res) => {
+  res.sendFile(path.join(__dirname, "services.html"));
+});
+
+app.get("/about", (req, res) => {
+  res.sendFile(path.join(__dirname, "about.html"));
+});
+
+app.get("/contact", (req, res) => {
+  res.sendFile(path.join(__dirname, "contact.html"));
+});
+
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+  console.log(`ECU Enhancements site running on port ${port}`);
 });
