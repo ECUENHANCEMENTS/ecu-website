@@ -1,19 +1,16 @@
 import express from "express";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const app = express();
-const port = process.env.PORT || 8080;
 
-app.use(express.static(__dirname));
+// Serve all static files in the root directory
+app.use(express.static("."));
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
+// Serve index.html for the root route
+app.get("/", (req, res) => {
+  res.sendFile("index.html", { root: "." });
 });
 
+// Cloud Run requires listening on process.env.PORT
+const port = process.env.PORT || 8080;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
